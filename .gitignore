@@ -17,3 +17,10 @@ public/js/
 
 
 public/mix-manifest.json
+public/js/app.js
+
+public/
+
+.idea/
+composer.lock
+package-lock.json

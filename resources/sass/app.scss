@@ -1,1 +1,43 @@
-//
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+.wave-container {
+    position: relative;
+    background: #ffcc00;
+    height: 50vh;
+}
+
+.wave {
+    position: absolute;
+    height: 70px;
+    width: 100%;
+    background: #ffcc00;
+    bottom: 0;
+}
+
+.wave::before, .wave::after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 100% 50%;
+}
+
+.wave::before {
+    width: 55%;
+    height: 109%;
+    background-color: #f8fafc;
+    right: -1.5%;
+    top: 60%;
+}
+.wave::after {
+    width: 55%;
+    height: 100%;
+    background-color: #ffcc00;
+    left: -1.5%;
+    top: 40%;
+}
