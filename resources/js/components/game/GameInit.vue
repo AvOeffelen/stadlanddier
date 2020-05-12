@@ -25,6 +25,10 @@
                             <b-select id="amount-rounds" v-model="game.rounds" :options="roundOptions"></b-select>
                         </div>
                         <div class="text-left pt-3">
+                            <label for="amount-rounds">Ronde tijd</label>
+                            <b-select id="amount-rounds" v-model="game.timePerRound" :options="timeOptions"></b-select>
+                        </div>
+                        <div class="text-left pt-3">
                             <label for="option-list">Selecteer velden</label>
                             <ul id="option-list" class="option-list">
                                 <li v-for="(option,index) in this.game.options">
@@ -53,18 +57,18 @@
                             name:'',
                             is_owner:1,
                             location:'',
-                            ready:0
+                            ready:0,
+                            connected:0
                         }
                     },
                     selectedOptions:[
                         'hoofdstad',
-                        'stad',
                         'land',
                         'dier',
+                        'sport'
                     ],
                     options:[
                         'hoofdstad',
-                        'stad',
                         'land',
                         'dier',
                         'sport',
@@ -74,6 +78,8 @@
                         'auto'
                     ],
                     rounds:1,
+                    generatedLetters:null,
+                    timePerRound:10,
                 },
                 roundOptions:[
                     { value:1,text:"1"},
@@ -86,6 +92,14 @@
                     { value:8,text:"8"},
                     { value:9,text:"9"},
                     { value:10,text:"10"},
+                ],
+                timeOptions:[
+                    {value:10,text:"10 sec"},
+                    {value:60,text:"60 sec"},
+                    {value:90,text:"90 sec"},
+                    {value:120,text:"120 sec"},
+                    {value:150,text:"150 sec"},
+                    {value:180,text:"180 sec"},
                 ],
                 createdGameData:null,
             };

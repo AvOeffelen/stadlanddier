@@ -44,12 +44,32 @@
                     <b-card-text>
                         <b-row>
                             <b-col>
+                                <h4>Selected time per round</h4>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <p>{{this.game[0].round_time}} seconden</p>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <h4>Rounds were playing</h4>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <p>{{this.game[0].rounds}}</p>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
                                 <h4>Selected options</h4>
                             </b-col>
                         </b-row>
                         <b-row>
                             <b-col>
-                                <ul>
+                                <ul class="any-list">
                                     <li v-for="(subject,index) in this.subjects">
                                         {{subject}}
                                     </li>
@@ -63,7 +83,7 @@
                         </b-row>
                         <b-row>
                             <b-col>
-                                <ul>
+                                <ul class="any-list">
                                     <li v-for="(player,key) in this.players">
                                         {{player.name}}
                                     </li>
@@ -72,14 +92,24 @@
                         </b-row>
                         <b-row>
                             <b-col>
-                                <b-button variant="primary" size="lg" block @click="checkWhichPlayerIAm">TestButton</b-button>
-                                <b-button variant="notify-blue" size="lg" block v-if="currentPlayer != null && currentPlayer.is_owner == 1" @click="startGame">Start game</b-button>
-                                <b-button variant="notify-blue" size="lg" block v-else disabled class="disabled">Start game</b-button>
+                                <b-button variant="notify-blue" size="lg" block
+                                          v-if="iAmOwner == true && enoughPlayers == true" @click="startGame">Start game
+                                </b-button>
+                                <b-button variant="notify-blue" size="lg" block v-else disabled class="disabled">Start
+                                    game
+                                </b-button>
 
                             </b-col>
                         </b-row>
                     </b-card-text>
                 </b-card>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col align-self="center">
+                <div class="text-center">
+                    <a :href="{lobbyUrl}">{{lobbyUrl}}</a>
+                </div>
             </b-col>
         </b-row>
     </div>
@@ -88,80 +118,121 @@
 <script>
     export default {
         name: "GatherPlayers",
-        props:[
+        props: [
             'uniquecode',
-            'game'
+            'game',
+            'cookie'
         ],
         data() {
             return {
-                newPlayer:{
-                    name:'',
-                    is_owner:0,
-                    location:'192.0.0.1',
-                    ready:0
+                newPlayer: {
+                    name: '',
+                    is_owner: 0,
+                    location: '',
+                    ready: 0,
+                    connected:0
                 },
                 currentPlayer: null,
-                players:null,
-                subjects:null,
-                loadedGame:null,
-                polling:null,
-                iAmOwner:false,
-                enoughPlayers:false,
+                players: null,
+                subjects: null,
+                loadedGame: null,
+                pollingPlayers: null,
+                iAmOwner: false,
+                enoughPlayers: false,
+                started: false,
+                pollingStart: null,
+                lobbyUrl: '',
             };
         },
         created() {
-            this.checkWhichPlayerIAm();
-            this.playersToJson();
             this.selectedSubjectsToJson();
             this.pollUpdatePlayers();
-
+            this.playersToJson();
+            this.checkWhichPlayerIAm();
+            this.generateLobbyUrl();
+            setTimeout(() =>{
+                this.pollingGameStart();
+            },10000);
         },
         methods: {
-            joinGame(){
-                axios.post(`/game/${this.uniquecode}/player-join-game`,this.newPlayer)
-                .then(response => {
-                    this.players.push(response.data);
-                    console.log("newPlayer",this.players);
-
-                    this.newPlayer.name = '';
-                    this.newPlayer.is_owner = 0;
-                    this.newPlayer.location = '192.0.0.1';
-                });
-            },
-            checkWhichPlayerIAm(){
-                axios.get(`/game/${this.uniquecode}/player-check`)
+            //TODO:: Build check if joined you cant join no-more.
+            //TODO:: Make username validation. No empty string allowed.
+            joinGame() {
+                axios.post(`/game/${this.uniquecode}/player-join-game`, this.newPlayer)
                     .then(response => {
+                        this.players.push(response.data);
                         this.currentPlayer = response.data;
                     });
             },
-            playersToJson(){
+            checkWhichPlayerIAm() {
+                for (let p in this.players) {
+                    if (this.players[p].location == this.cookie) {
+                        this.currentPlayer = this.players[p];
+                    }
+                }
+                this.checkOwnerShip();
+            },
+            playersToJson() {
                 this.players = JSON.parse(this.game[0].players);
             },
-            selectedSubjectsToJson(){
+            selectedSubjectsToJson() {
                 this.subjects = JSON.parse(this.game[0].selected_options);
             },
-            updatePlayers(){
+            updatePlayers() {
                 axios.get(`/game/${this.uniquecode}/load`)
                     .then(response => {
                         this.loadedGame = response.data;
                         this.players = JSON.parse(this.loadedGame[0].players);
-                        if(this.players.length > 2){
-                            this.enoughPlayers = !this.enoughPlayers;
-                        }
                     });
             },
-            pollUpdatePlayers(){
-                this.polling = setInterval(() =>{
+            pollUpdatePlayers() {
+                this.pollingPlayers = setInterval(() => {
                     this.updatePlayers();
-                },5000);
+                    if (this.enoughPlayers != true) {
+                        this.checkPlayerCount();
+                    }
+                }, 5000);
             },
-            startGame(){
-
-            }
+            checkOwnerShip() {
+                if (this.currentPlayer != null) {
+                    if (this.currentPlayer.is_owner == 1) {
+                        this.iAmOwner = true;
+                    }
+                } else {
+                }
+            },
+            startGame() {
+                let url = `/game/${this.uniquecode}/start`;
+                axios.get(url)
+                    .then(response => {
+                        window.location = url;
+                    });
+            },
+            pollingGameStart() {
+                this.pollingStart = setInterval(() => {
+                    if (this.loadedGame[0].started == true) {
+                        let url = `/game/${this.uniquecode}/start`;
+                        axios.get(url)
+                            .then(response => {
+                                window.location = url;
+                            });
+                    }
+                }, 5000);
+            },
+            checkPlayerCount() {
+                if (this.players.length >= 2) {
+                    this.enoughPlayers = true;
+                }
+            },
+            generateLobbyUrl() {
+                this.lobbyUrl = `game/${this.uniquecode}/lobby`;
+            },
         }
     }
 </script>
 
 <style scoped>
-
+    .any-list {
+        list-style-type: none;
+    }
 </style>

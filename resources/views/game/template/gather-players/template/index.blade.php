@@ -1,1 +1,2 @@
-<game-gather-players uniquecode="{{$uniquecode}}" :game="{{$game}}"></game-gather-players>
+<game-gather-players uniquecode="{{$uniquecode}}" :game="{{$game}}" cookie="{{$cookie}}"></game-gather-players>
+

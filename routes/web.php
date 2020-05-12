@@ -27,7 +27,16 @@ Route::group(['prefix' => 'game', 'namespace' => 'Axios','middleware'=>['web']],
 
     Route::get('/{uniquecode}/load','GameController@loadGame')->name('game.load');
     Route::post('/{uniquecode}/player-join-game','GameController@playerJoinGame')->name('game.load');
+    Route::get('/{uniquecode}/start','GameController@startGame')->name('game.start');
+    Route::put('/{uniquecode}/set-player-connected','GameController@setPlayerConnected')->name('game.set-player.connected');
+    Route::put('/{uniquecode}/set-player-not-ready','GameController@setPlayerNotReady')->name('game.set-player.not.ready');
 
-    Route::get('/{uniquecode}/player-check','GameController@playerCheck')->name('game.owner.check');
+    Route::put('checkCookie','GameController@getCookie')->name('game.check.cookie');
+
+    Route::put('/{uniquecode}/set-progress','Gamecontroller@setProgress')->name('game.set.progress');
+    Route::put('/{uniquecode}/set-round-progress','Gamecontroller@setRoundProgress')->name('game.set.progress');
+    Route::put('/{uniquecode}/update-end-round','Gamecontroller@updateEndRound')->name('game.set.not.in.progress');
+    Route::get('/{uniquecode}/letter/{letter}/make-array','Gamecontroller@startNewRound')->name('game.make.answer.array');
+
 
 });
