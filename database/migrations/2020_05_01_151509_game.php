@@ -16,6 +16,7 @@ class Game extends Migration
         Schema::create('game', function (Blueprint $table) {
             $table->id();
             $table->tinyInteger('started')->default(0);
+            $table->tinyInteger('finished')->default(0);
             $table->tinyInteger('in_progress')->default(0);
             $table->tinyInteger('round_in_progress')->default(0);
             $table->integer('round_time')->default(60);

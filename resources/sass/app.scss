@@ -6,17 +6,22 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.background{
+    height: 52vh;
+    background: lighten(#1e3799,0%);
+}
 .wave-container {
     position: relative;
-    background: #ffcc00;
-    height: 50vh;
+    background: lighten(#1e3799,0%);
+    height: 65vh;
 }
 
 .wave {
     position: absolute;
     height: 70px;
     width: 100%;
-    background: #ffcc00;
+    background: lighten(#1e3799,0%);
     bottom: 0;
 }
 
@@ -30,14 +35,23 @@
 .wave::before {
     width: 55%;
     height: 109%;
-    background-color: #f8fafc;
+    background-color: #fff;
     right: -1.5%;
     top: 60%;
 }
 .wave::after {
     width: 55%;
     height: 100%;
-    background-color: #ffcc00;
+    background: lighten(#1e3799,0%);
     left: -1.5%;
     top: 40%;
+}
+
+.body{
+    height: 100vh;
+    background-color: #fff
+}
+
+.sld-title{
+    color: lighten(#e55039,0%);
 }

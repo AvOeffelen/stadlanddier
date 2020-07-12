@@ -20,4 +20,9 @@ class Game extends Model
         }
         return $randomString;
     }
+
+    public function GameAnswers()
+    {
+        return $this->hasMany(GameAnswer::class);
+    }
 }

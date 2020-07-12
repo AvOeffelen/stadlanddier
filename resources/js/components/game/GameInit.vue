@@ -1,11 +1,11 @@
 <template>
     <div>
         <b-row class="p-5">
-            <b-col md="7" lg="7" sm="7" align-self="center">
+            <b-col md="12" lg="7" sm="12" align-self="center">
                 <b-card
                     header-tag="header"
                     header-class=""
-                    header-bg-variant="notify-blue"
+                    header-bg-variant="dark-sapphire-lighter"
                     header-text-variant="white"
                     footer-tag="footer"
                     class="mb-2 text-center"
@@ -15,7 +15,7 @@
                             <div class="text-center"><em>Start game</em></div>
                         </div>
                     </template>
-                    <b-card-text>
+                    <b-card-text body-bg-variant="dark-sapphire">
                         <div class="text-left pt-3">
                             <label for="username">Username</label>
                             <b-form-input id="username" v-model="game.players[0].name"></b-form-input>
@@ -29,16 +29,24 @@
                             <b-select id="amount-rounds" v-model="game.timePerRound" :options="timeOptions"></b-select>
                         </div>
                         <div class="text-left pt-3">
-                            <label for="option-list">Selecteer velden</label>
+                            <label for="option-list">Selecteer onderwerpen</label>
                             <ul id="option-list" class="option-list">
                                 <li v-for="(option,index) in this.game.options">
                                     <input type="checkbox" class="form-checkbox" :value="option"
                                            v-model="game.selectedOptions" />
                                     {{option}}
                                 </li>
+                                <li class="disabled"><input  type="checkbox" disabled /> artiest (coming soon!)</li>
+                                <li class="disabled"><input  type="checkbox" disabled /> acteur (coming soon!)</li>
                             </ul>
                         </div>
-                        <b-button block variant="notify-blue" @click="createGame">create</b-button>
+                        <div class="text-left pt-3">
+                            <label for="public_lobby">Publieke lobby</label>
+                            <ul id="public_lobby" class="option-list">
+                                <li class="disabled"><input  type="checkbox" v-model="game.public_lobby" value="off" disabled/>&nbsp;Privé spel (coming soon!)</li>
+                            </ul>
+                        </div>
+                        <b-button block variant="dark-sapphire-lighter" @click="createGame">create</b-button>
                     </b-card-text>
                 </b-card>
             </b-col>
@@ -54,7 +62,7 @@
                 game:{
                     players: {
                         0:{
-                            name:'',
+                            name:'NewPlayer',
                             is_owner:1,
                             location:'',
                             ready:0,
@@ -62,7 +70,7 @@
                         }
                     },
                     selectedOptions:[
-                        'hoofdstad',
+                        // 'hoofdstad',
                         'land',
                         'dier',
                         'sport'
@@ -72,14 +80,16 @@
                         'land',
                         'dier',
                         'sport',
-                        'artiest',
-                        'acteur',
                         'job',
-                        'auto'
+                        'auto',
+                        'merk'
+                        // 'artiest',
+                        // 'acteur',
                     ],
-                    rounds:1,
+                    rounds:2,
                     generatedLetters:null,
                     timePerRound:10,
+                    public_lobby:true
                 },
                 roundOptions:[
                     { value:1,text:"1"},
@@ -95,7 +105,6 @@
                 ],
                 timeOptions:[
                     {value:10,text:"10 sec"},
-                    {value:60,text:"60 sec"},
                     {value:90,text:"90 sec"},
                     {value:120,text:"120 sec"},
                     {value:150,text:"150 sec"},

@@ -5,7 +5,7 @@
 
 
 // Body
-$body-bg: #f8fafc;
+$body-bg: #6a89cc;
 
 // Typography
 $font-family-sans-serif: 'Nunito', sans-serif;
@@ -29,6 +29,9 @@ $button-blue: #0c72f0;
 $light-blue: #1e60b0;
 $dark-blue:#06418a;
 $Notify-blue : #1e60b0;
+$sld-orange: #e55039;
+$dark-sapphire:#1e3799;
+$dark-sapphire-lighter:lighten($dark-sapphire,20%);
 
 // Spacing Variables
 // Change below variable if the height of the navbar changes
@@ -88,7 +91,10 @@ $theme-colors: map-merge(
             'light': $light,
             'dark': $dark,
             'barabaz-red':$barabaz-red,
-            'notify-blue':$Notify-blue
+            'notify-blue':$Notify-blue,
+            'sld-orange':$sld-orange,
+            'dark-sapphire':$dark-sapphire,
+            'dark-sapphire-lighter':$dark-sapphire-lighter
         ),
         $theme-colors
 );

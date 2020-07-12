@@ -1,114 +1,66 @@
 <template>
     <div>
         <b-row class="p-5">
-            <b-col md="4" lg="4" sm="4" align-self="center">
-                <b-card
-                    header-tag="header"
-                    header-class=""
-                    header-bg-variant="notify-blue"
-                    header-text-variant="white"
-                    footer-tag="footer"
-                    class="mb-2 text-center"
-                >
-                    <template v-slot:header>
-                        <div class="header-card">
-                            <div class="text-center"><em>Schrijf je zelf in</em></div>
-                        </div>
-                    </template>
-                    <b-card-text>
+            <b-col md="4" lg="4" sm="4">
+                <b-row>
+                    <b-col md="12">
                         <div class="text-left pt-3">
-                            <label for="username">Username</label>
+                            <h3 class="orange-text">Join game</h3>
+                        </div>
+                        <div class="text-left pt-3">
+                            <h4 for="username" class="orange-text">Username</h4>
                             <b-form-input id="username" v-model="newPlayer.name"></b-form-input>
                         </div>
                         <div class="pt-3">
-                            <b-button block variant="notify-blue" @click="joinGame">join</b-button>
+                            <b-button block variant="sld-orange" @click="joinGame">Play!</b-button>
                         </div>
-                    </b-card-text>
-                </b-card>
+                    </b-col>
+                </b-row>
             </b-col>
             <b-col></b-col>
-            <b-col md="6" lg="6" sm="6" align-self="center">
-                <b-card
-                    header-tag="header"
-                    header-class=""
-                    header-bg-variant="notify-blue"
-                    header-text-variant="white"
-                    footer-tag="footer"
-                    class="mb-2 text-center"
-                >
-                    <template v-slot:header>
-                        <div class="header-card">
-                            <div class="text-center"><em>Lobby information</em></div>
-                        </div>
-                    </template>
-                    <b-card-text>
-                        <b-row>
-                            <b-col>
-                                <h4>Selected time per round</h4>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <p>{{this.game[0].round_time}} seconden</p>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <h4>Rounds were playing</h4>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <p>{{this.game[0].rounds}}</p>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <h4>Selected options</h4>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <ul class="any-list">
-                                    <li v-for="(subject,index) in this.subjects">
-                                        {{subject}}
-                                    </li>
-                                </ul>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <h4>Joined players</h4>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <ul class="any-list">
-                                    <li v-for="(player,key) in this.players">
-                                        {{player.name}}
-                                    </li>
-                                </ul>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
-                                <b-button variant="notify-blue" size="lg" block
-                                          v-if="iAmOwner == true && enoughPlayers == true" @click="startGame">Start game
-                                </b-button>
-                                <b-button variant="notify-blue" size="lg" block v-else disabled class="disabled">Start
-                                    game
-                                </b-button>
+            <b-col md="6" lg="6" sm="6">
+                <div class="text-center">
+                    <h2 class="orange-text">Game info</h2>
+                </div>
+                <div class="text-center py-2">
+                    <h2 class="orange-text">Round time</h2>
+                    <h4 class="orange-text">{{this.game[0].round_time}} seconden</h4>
+                </div>
+                <div class="text-center py-2">
+                    <h2 class="orange-text">Number of rounds</h2>
+                    <h4 class="orange-text">{{this.game[0].rounds}}</h4>
+                </div>
+                <div class="text-center py-2">
+                    <h2 class="orange-text">Onderwerpen</h2>
+                    <table class="table table-borderless">
+                        <tbody class="orange-text">
+                            <tr v-for="(subject,index) in this.subjects">
+                                <td>{{subject}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-center py-2">
+                    <h2 class="orange-text">Spelers</h2>
+                    <table class="table table-borderless">
+                        <tbody class="orange-text">
+                            <tr v-for="(player,key) in this.players">
+                                <td>{{player.name}}</td>
+                            </tr>
+                        </tbody>
 
-                            </b-col>
-                        </b-row>
-                    </b-card-text>
-                </b-card>
+                    </table>
+                </div>
+                <div class="text-center" v-if="iAmOwner == true && enoughPlayers == true">
+                    <b-button variant="sld-orange" size="lg" block @click="startGame">Start game
+                    </b-button>
+                </div>
             </b-col>
         </b-row>
-        <b-row>
+        <b-row class="py-5">
             <b-col align-self="center">
-                <div class="text-center">
-                    <a :href="{lobbyUrl}">{{lobbyUrl}}</a>
+                <div class="text-center share-link">
+                    <a class="orange-text" :href="lobbyUrl">{{lobbyUrl}}</a>
                 </div>
             </b-col>
         </b-row>
@@ -126,7 +78,7 @@
         data() {
             return {
                 newPlayer: {
-                    name: '',
+                    name: 'NewPlayerz',
                     is_owner: 0,
                     location: '',
                     ready: 0,
@@ -231,8 +183,20 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss">
+    $sld-orange : #e55039;
     .any-list {
         list-style-type: none;
+    }
+
+    .orange-text {
+        color: $sld-orange;
+    }
+
+    .table td{
+        padding:0;
+    }
+    .share-link a:hover{
+        color: lighten($sld-orange,10%);
     }
 </style>

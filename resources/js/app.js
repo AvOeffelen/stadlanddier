@@ -18,6 +18,8 @@ import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
 Vue.component('game-init-component', require('./components/game/GameInit.vue').default);
 Vue.component('game-gather-players', require('./components/game/GatherPlayers.vue').default);
 Vue.component('game',require('./components/game/Game').default);
+Vue.component('dev-component',require('./components/developmentComponent').default);
+Vue.component('baseTimer',require('./components/game/BaseTimer').default);
 
 Vue.use(BootstrapVue);
 
